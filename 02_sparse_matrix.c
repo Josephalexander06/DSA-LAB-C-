@@ -69,26 +69,25 @@ int main() {
 // It allows input of two sparse matrices and outputs their sum and transpose in standard form.
 
 // Example usage:
-// Enter non-zero terms in first matrix: 3
+// Enter non-zero terms in first matrix: 2
 // Enter row, col, value for each term:
-// 0 0 1
-// 1 1 2
-// 2 2 3
-
-// Enter non-zero terms in second matrix: 3
+// 0 1 5
+// 2 0 6
+// Enter non-zero terms in second matrix: 2
 // Enter row, col, value for each term:
-// 0 0 4
-// 1 1 5
-// 2 2 6
+// 1 2 9
+// 2 1 4
 
 // Sum Matrix:
 // Row     Col     Value
-// 0       0       5
-// 1       1       7
-// 2       2       9
+// 0       1       5
+// 1       2       9
+// 2       0       6
+// 2       1       4
 
 // Transpose:
 // Row     Col     Value
-// 0       0       5
-// 1       1       7
-// 2       2       9
+// 1       0       5
+// 2       1       9
+// 0       2       6
+// 1       2       4

@@ -15,28 +15,75 @@ struct Node* createNode(int value) {
 }
 
 struct Node* insert(struct Node* root, int value) {
-    if(root == NULL) return createNode(value);
-    
-    if(value < root->data)
+    if (root == NULL)
+        return createNode(value);
+
+    if (value < root->data)
         root->left = insert(root->left, value);
-    else if(value > root->data)
+    else if (value > root->data)
         root->right = insert(root->right, value);
-    
+
     return root;
 }
 
 struct Node* search(struct Node* root, int value) {
-    if(root == NULL || root->data == value)
+    if (root == NULL || root->data == value)
         return root;
-    
-    if(value < root->data)
+
+    if (value < root->data)
         return search(root->left, value);
     else
         return search(root->right, value);
 }
 
+// Find inorder successor (smallest in right subtree)
+struct Node* findMin(struct Node* root) {
+    while (root->left != NULL)
+        root = root->left;
+    return root;
+}
+
+// DELETE FUNCTION
+struct Node* deleteNode(struct Node* root, int value) {
+    if (root == NULL)
+        return root;
+
+    if (value < root->data)
+        root->left = deleteNode(root->left, value);
+
+    else if (value > root->data)
+        root->right = deleteNode(root->right, value);
+
+    else {
+        // Case 1: No child
+        if (root->left == NULL && root->right == NULL) {
+            free(root);
+            return NULL;
+        }
+
+        // Case 2: One child
+        else if (root->left == NULL) {
+            struct Node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL) {
+            struct Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Case 3: Two children
+        struct Node* temp = findMin(root->right);
+        root->data = temp->data; // copy successor's value
+        root->right = deleteNode(root->right, temp->data);
+    }
+
+    return root;
+}
+
 void inorder(struct Node* root) {
-    if(root != NULL) {
+    if (root != NULL) {
         inorder(root->left);
         printf("%d ", root->data);
         inorder(root->right);
@@ -46,42 +93,50 @@ void inorder(struct Node* root) {
 int main() {
     struct Node* root = NULL;
     int choice, value;
-    
-    while(1) {
-        printf("\n1.Insert 2.Search 3.Display 4.Exit\nChoice: ");
+
+    while (1) {
+        printf("\n1.Insert 2.Search 3.Display 4.Delete 5.Exit\nChoice: ");
         scanf("%d", &choice);
-        
-        switch(choice) {
+
+        switch (choice) {
             case 1:
                 printf("Enter value: ");
                 scanf("%d", &value);
                 root = insert(root, value);
                 printf("Inserted %d\n", value);
                 break;
-                
+
             case 2:
                 printf("Enter value to search: ");
                 scanf("%d", &value);
-                if(search(root, value) != NULL)
+                if (search(root, value) != NULL)
                     printf("%d found\n", value);
                 else
                     printf("%d not found\n", value);
                 break;
-                
+
             case 3:
                 printf("BST (inorder): ");
                 inorder(root);
                 printf("\n");
                 break;
-                
+
             case 4:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                root = deleteNode(root, value);
+                printf("Deleted %d (if existed)\n", value);
+                break;
+
+            case 5:
                 return 0;
-                
+
             default:
                 printf("Invalid choice!\n");
         }
     }
 }
+
 
 // Output: Binary Search Tree Implementation in C
 // This code implements a simple binary search tree (BST) in C.

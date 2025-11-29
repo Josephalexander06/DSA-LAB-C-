@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 
 // Binary Search Algorithm
 int binarySearch(int arr[], int n, int target) {
@@ -6,51 +7,62 @@ int binarySearch(int arr[], int n, int target) {
     int right = n - 1;
     
     while (left <= right) {
-        int mid = left + (right - left) / 2;  // Prevents overflow
+        int mid = left + (right - left) / 2;
         
-        if (arr[mid] == target) {
-            return mid;  // Element found
-        }
-        else if (arr[mid] < target) {
-            left = mid + 1;  // Search in right half
-        }
-        else {
-            right = mid - 1;  // Search in left half
-        }
+        if (arr[mid] == target)
+            return mid;
+        else if (arr[mid] < target)
+            left = mid + 1;
+        else
+            right = mid - 1;
     }
-    
-    return -1;  // Element not found
+    return -1;
 }
 
 int main() {
     int n, target;
-    
-    // Input sorted array
+
     printf("Enter size of sorted array: ");
     scanf("%d", &n);
-    
+
     int arr[n];
+
     printf("Enter %d sorted numbers: ", n);
-    for(int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
         scanf("%d", &arr[i]);
-    }
-    
-    // Input target to search
+
     printf("Enter number to search: ");
     scanf("%d", &target);
-    
-    // Perform binary search
+
+    // -------------------------------
+    // Measure Time
+    // -------------------------------
+    clock_t start = clock();
+
     int result = binarySearch(arr, n, target);
-    
-    // Display result
-    if (result != -1) {
+
+    clock_t end = clock();
+    double time_taken = (double)(end - start) / CLOCKS_PER_SEC;
+
+    // -------------------------------
+    // Space Calculation
+    // -------------------------------
+    int space_array = sizeof(arr);      // array memory
+    int space_int = sizeof(int) * 3;    // left, right, mid (approx only)
+    int total_space = space_array + space_int;
+
+    // Result
+    if (result != -1)
         printf("Element %d found at index %d\n", target, result);
-    } else {
+    else
         printf("Element %d not found in the array\n", target);
-    }
-    
+
+    printf("Execution Time: %f seconds\n", time_taken);
+    printf("Space Used: %d bytes\n", total_space);
+
     return 0;
 }
+
 
 // Output: Binary Search Implementation in C
 // This code implements binary search on a sorted array in C.

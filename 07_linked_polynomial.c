@@ -17,18 +17,31 @@ struct Node* createNode(int coeff, int exp) {
 
 void addTerm(struct Node** poly, int coeff, int exp) {
     struct Node* newNode = createNode(coeff, exp);
-    
-    if(*poly == NULL) {
+
+    // If list empty OR new node has larger exponent → insert at beginning
+    if (*poly == NULL || exp > (*poly)->exp) {
+        newNode->next = *poly;
         *poly = newNode;
         return;
     }
-    
+
     struct Node* temp = *poly;
-    while(temp->next != NULL) {
+
+    // Find position to insert
+    while (temp->next != NULL && temp->next->exp > exp) {
         temp = temp->next;
     }
-    temp->next = newNode;
+
+    // If same exponent → add coefficients (combine like terms)
+    if (temp->next != NULL && temp->next->exp == exp) {
+        temp->next->coeff += coeff;
+        free(newNode);
+    } else {
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
 }
+
 
 struct Node* addPolynomials(struct Node* poly1, struct Node* poly2) {
     struct Node* result = NULL;
